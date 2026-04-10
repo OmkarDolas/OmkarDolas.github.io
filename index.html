@@ -683,9 +683,13 @@ footer {
 
 /* ── Fade-in animation ── */
 .fade-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.fade-in.hidden {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 .fade-in.visible { opacity: 1; transform: translateY(0); }
 
@@ -1066,8 +1070,8 @@ footer {
         Open to on-site, hybrid, and remote positions.
       </p>
       <div class="contact-links">
-        <a href="mailto:odola1@unh.newhaven.edu" class="contact-link">
-          <span class="contact-link-icon">✉</span> odola1@unh.newhaven.edu
+        <a href="/cdn-cgi/l/email-protection#214e454e4d401061544f490f4f4456494057444f0f444554" class="contact-link">
+          <span class="contact-link-icon">✉</span> <span class="__cf_email__" data-cfemail="84ebe0ebe8e5b5c4f1eaecaaeae1f3ece5f2e1eaaae1e0f1">[email&#160;protected]</span>
         </a>
         <a href="tel:2035894442" class="contact-link">
           <span class="contact-link-icon">☎</span> (203) 589-4442
@@ -1081,7 +1085,7 @@ footer {
       </div>
     </div>
     <div style="display:flex;flex-direction:column;gap:1rem;">
-      <a href="mailto:odola1@unh.newhaven.edu" class="btn btn-primary" style="text-align:center;justify-content:center;">Send a message →</a>
+      <a href="/cdn-cgi/l/email-protection#e48b808b8885d5a4918a8cca8a81938c8592818aca818091" class="btn btn-primary" style="text-align:center;justify-content:center;">Send a message →</a>
       <a href="Omkar_Dilip_Dolas.pdf" class="btn btn-ghost" style="text-align:center;justify-content:center;" download>↓ Download Resume</a>
     </div>
   </div>
@@ -1093,34 +1097,28 @@ footer {
   <span class="footer-mono" style="color:var(--cyan)">// built with HTML · hosted on GitHub Pages</span>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Intersection Observer for fade-in
+const fadeEls = document.querySelectorAll('.fade-in');
+fadeEls.forEach(el => el.classList.add('hidden'));
+
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry, i) => {
     if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      setTimeout(() => {
+        entry.target.classList.remove('hidden');
+        entry.target.classList.add('visible');
+      }, i * 80);
       observer.unobserve(entry.target);
     }
   });
-}, { threshold: 0.1 });
+}, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+fadeEls.forEach(el => observer.observe(el));
 
 // Smooth active nav link highlight
 const sections = document.querySelectorAll('section[id], div[id="hero"]');
 const navLinks = document.querySelectorAll('.nav-links a');
 
 window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(sec => {
-    if (window.scrollY >= sec.offsetTop - 120) current = sec.getAttribute('id');
-  });
-  navLinks.forEach(a => {
-    a.style.color = a.getAttribute('href') === '#' + current
-      ? 'var(--cyan)'
-      : 'var(--text-dim)';
-  });
-});
-</script>
-</body>
-</html>
+  let curr
